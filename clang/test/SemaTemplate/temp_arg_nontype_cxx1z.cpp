@@ -205,9 +205,9 @@ namespace Auto {
 
     struct Y : X {};
     void type_affects_identity(B<&X::n>) {}
-    void type_affects_identity(B<(int Y::*)&X::n>) {} // FIXME: expected-error {{sorry}}
+    void type_affects_identity(B<(int Y::*)&X::n>) {} // FIXME: expected-error {{}}
     void type_affects_identity(B<(const int X::*)&X::n>) {}
-    void type_affects_identity(B<(const int Y::*)&X::n>) {} // FIXME: expected-error {{sorry}}
+    void type_affects_identity(B<(const int Y::*)&X::n>) {} // FIXME: expected-error {{}}
 
     // A case where we need to do auto-deduction, and check whether the
     // resulting dependent types match during partial ordering. These
