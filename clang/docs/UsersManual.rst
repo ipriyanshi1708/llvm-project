@@ -2199,6 +2199,41 @@ are listed below.
   link-time optimizations like whole program inter-procedural basic block
   reordering.
 
+Optimization Flags
+------------------
+
+The optimization flags control the level of optimization that the compiler performs on the code. For example, ``-O1`` enables a set of optimizations that are designed to improve code performance while still maintaining debugging capabilities. ``-Og`` enables optimizations that do not interfere with debugging, while ``-Ofast`` enables more aggressive optimizations that may sacrifice some debugging capabilities in exchange for maximum performance.
+
+You can use these optimization flags with the Clang compiler by specifying them on the command line when invoking the compiler. For example, to compile a C++ source file with the ``-O2`` optimization level, you would run the following command:
+
+  .. code-block:: console
+
+   $ clang++ -O2 myfile.cpp -o myfile
+
+Here are some common optimization flags with basic descriptions for different versions of the Clang compiler:
+
+Clang 3.8 and earlier:
+""""""""""""""""""""""
+
+1. ``-O0``: no optimization
+2. ``-O1``: basic optimization, such as function inlining and constant propagation
+3. ``-O2``: more aggressive optimization, such as loop unrolling and instruction scheduling
+4. ``-O3``: even more aggressive optimization, such as loop vectorization and function cloning
+5. ``-Os``: optimize for code size rather than execution speed
+6. ``-Ofast``: enable all optimizations that do not violate strict standards compliance
+
+Clang 3.9 and later:
+""""""""""""""""""""
+
+1. ``-O0``: no optimization
+2. ``-O1``: basic optimization, such as function inlining and constant propagation
+3. ``-O2``: more aggressive optimization, such as loop unrolling and instruction scheduling
+4. ``-O3``: even more aggressive optimization, such as loop vectorization and function cloning
+5. ``-Os``: optimize for code size rather than execution speed
+6. ``-Ofast``: enable all optimizations that do not violate strict standards compliance
+7. ``-Oz``: like -Os, but with more aggressive optimization for code size
+8. ``-Og``: optimize for debuggability, with minimal optimization that does not interfere with debugging
+
 Profile Guided Optimization
 ---------------------------
 
