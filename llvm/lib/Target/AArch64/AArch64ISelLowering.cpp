@@ -16175,7 +16175,24 @@ static SDValue performANDORCSELCombine(SDNode *N, SelectionDAG &DAG) {
                      CSel0.getOperand(1), DAG.getConstant(CC1, DL, MVT::i32),
                      CCmp);
 }
+static SDValue performFloatOpt(SDNode *N, SelectionDAG &DAG) {
+  EVT VT = N->getValueType(0);
+  SDValue Cmp0 = N->getOperand(0);
+  SDValue Cmp1 = N->getOperand(1);
+  SDLoc DL(N);
 
+  if (Cmp0.getOperand(1).getValueType().isFloatingPoint() &&
+      Cmp1.getOperand(1).getValueType().isFloatingPoint()) {
+
+    SDValue FCmp1 = DAG.getNode(ISD::SETCC, DL, VT, Cmp1.getOperand(0), Cmp1.getOperand(1), Cmp1.getOperand(2));
+    SDValue FCmp0 = DAG.getNode(AArch64ISD::FCCMP, DL, MVT::Glue, Cmp0.getOperand(0), Cmp0.getOperand(1), DAG.getConstant(0, DL, MVT::i32), Cmp0.getOperand(2));
+    SDValue CSel = DAG.getNode(AArch64ISD::CSINC, DL, VT, DAG.getConstant(0, DL, VT), FCmp0, Cmp0.getOperand(2));
+
+    return DAG.getMergeValues({FCmp1, FCmp0, CSel}, DL);
+  }
+
+  return SDValue();
+}
 static SDValue performORCombine(SDNode *N, TargetLowering::DAGCombinerInfo &DCI,
                                 const AArch64Subtarget *Subtarget,
                                 const AArch64TargetLowering &TLI) {
@@ -16388,8 +16405,8 @@ static SDValue performANDCombine(SDNode *N,
   SDValue RHS = N->getOperand(1);
   EVT VT = N->getValueType(0);
 
-  if (SDValue R = performANDORCSELCombine(N, DAG))
-    return R;
+  if(SDValue R = performFloatOpt(N,DAG))
+  return R;
 
   if (!DAG.getTargetLoweringInfo().isTypeLegal(VT))
     return SDValue();
